@@ -11,4 +11,8 @@ public class Servidor {
             ss.close();
         }catch(Exception e){System.out.println(e);}
     }
+
+    public void nada(){
+
+    }
 } 

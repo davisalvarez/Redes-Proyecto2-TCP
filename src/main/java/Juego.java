@@ -51,17 +51,35 @@ public class Juego {
         }*/
     }
 
-    public void iniciarPartida(){
-        //quitamos la primer carta
-        this.deck.pop();
-
-
-
-    }
-
     public void agregarJugador(Jugador player1){
         this.juadores.add(player1);
     }
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public ArrayList<Jugador> getJuadores() {
+        return juadores;
+    }
+
+    public void setJuadores(ArrayList<Jugador> juadores) {
+        this.juadores = juadores;
+    }
+
+    public void addJugador(Jugador jugador){
+        this.juadores.add(jugador);
+    }
 }

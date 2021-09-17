@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class Jugador {
     private int id;
     private String nombre;
+
     private boolean alive;
     private Carta leftHand;
     private Carta rightHand;
