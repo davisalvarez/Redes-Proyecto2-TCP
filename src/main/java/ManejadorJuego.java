@@ -13,16 +13,9 @@ public class ManejadorJuego {
         return instance;
     }
 
-    public ManejadorJuego(){
+    private ManejadorJuego(){
         this.cJugadores = 0;
         this.salas = new ArrayList<>();
-    }
-
-    public void repartirCarta(Juego juego, Jugador readyP1){
-        int id = readyP1.getId(); // a donde va
-        int card = readyP1.getRightHand().getStrength(); // que carta es
-
-        //Acá manda por Socket
     }
 
     public void asignarJugador(String nombre){
@@ -37,6 +30,11 @@ public class ManejadorJuego {
             if(partida.getJuadores().size()<=4) {
                 partida.addJugador(nuevo);
                 agregado = true;
+
+                if(partida.getJuadores().size()>=4) {
+                    this.iniciarPartida(partida);
+                }
+                break;
             }
         }
         if (!agregado){
@@ -46,16 +44,14 @@ public class ManejadorJuego {
         }
     }
 
-    public void iniciarPartida(){
-        //quitamos la primer carta
-        this.deck.pop();
+    public void iniciarPartida(Juego partida){
 
         //Repartimos aleatoreamente las cartas a cada jugador
-        Collections.shuffle(juadores);
+        Collections.shuffle(partida.getJuadores());
 
-        for (Jugador tracer: this.juadores){
-            tracer.setRightHand(deck.pop());
-            ManejadorJuego.getInstance().repartirCarta(this, tracer);
+        for (Jugador tracer: partida.getJuadores()){
+            tracer.setRightHand(partida.getDeck().pop());
+            Servidor.getInstance().repartirCarta(partida, tracer);
         }
 
     }

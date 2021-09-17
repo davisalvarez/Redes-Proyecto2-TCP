@@ -49,6 +49,9 @@ public class Juego {
             System.out.print(count+" - ");
             System.out.println(deck.pop().getName());
         }*/
+
+        //quitamos la primer carta
+        this.deck.pop();
     }
 
     public void agregarJugador(Jugador player1){
@@ -77,6 +80,14 @@ public class Juego {
 
     public void setJuadores(ArrayList<Jugador> juadores) {
         this.juadores = juadores;
+    }
+
+    public Stack<Carta> getDeck() {
+        return deck;
+    }
+
+    public void setDeck(Stack<Carta> deck) {
+        this.deck = deck;
     }
 
     public void addJugador(Jugador jugador){
