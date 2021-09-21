@@ -26,14 +26,21 @@ def handle(player):
             room_id = client.recv(1024).decode('ascii') 
             room_id = int(room_id)
             room = None
+            room_exists = False                         #Make sure that the room exists
             if(room_id==0):
                 room = Room(len(rooms)+1)
                 rooms.append(room)
+                room_exists = True
             else:
                 for room_ in rooms:
                     if(room_._id==room_id):
                         room = room_
-            room.join(player)
+                        room_exists = True
+            if room_exists:                             #Make sure that the room exists
+                room.join(player)
+            else:                                       #Else, tell the user
+                message = b'Provided room does not exists'
+                broadcast(message)
         elif(player.room and not player.room.isPlaying):
             player.room.play()
         else:
