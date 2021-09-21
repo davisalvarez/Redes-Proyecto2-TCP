@@ -30,11 +30,12 @@ class Game(object):
 	def state(self):
 		state = "TABLE AFTER THE GAME:\n"
 		for player in self.players:
-			state += "\tPlayer: " + player.name + " Tokens: " + player.wins_counter + "\n"
+			state += "\tPlayer: " + player.name + " Tokens: " + str(player.wins_counter) + "\n"
 		return state
 
 	def play(self):
 		while(not self.evaluate()):
 			current = Round(self.players)
-			self.players = current.play()
-			print("all", self.state())
+			current.play()
+			for player_ in self.players:
+				player_.client.send('{}'.format(self.state()).encode('ascii'))

@@ -11,7 +11,4 @@ class Card(object):
 		self.value = value
 	
 	def __str__ (self):
-		if(self.public):
-			return ("Name:" + self.name + " \tValue:" + self.value)
-		else:
-			return "Name:******  \tValue:******" 
+		return (" Name:" + self.name + " \tValue:" + str(self.value))

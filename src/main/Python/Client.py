@@ -16,27 +16,15 @@ def receive():
             if message == 'NICKNAME':
                 client.send(nickname.encode('ascii'))
             elif message == 'ROOM':
-            	done = False
-            	while (not done):
-            		print("----------------------------------\n      Welcome to Love letter     \n ----------------------------------\n\t1. Join Room\t2.Create room\n")
-            		user = input("Choose:\t")
-            		if(user=="1"):
-            			room_id = input("Type the room ID")
-            			done = True
-            			client.send((str(room_id)).encode('ascii'))
-            		elif(user=="2"):
-                		client.send((str(-1)).encode('ascii'))					#If answer is negative then it tells server to create room
-                		done = True
+            	print("----------------------------------\n      Welcome to Love letter     \n ----------------------------------\n\tCreate room (type 0)\n\tJoin Room (type room id)")
             else:
                 print(message)
         except Exception as e:                                            #case on wrong ip/port details
             print(e,"An error occured!")
-            client.close()
-            break
 
 def write():
     while True:                                                 
-        message = "{}: {}".format(nickname, input(''))
+        message = "{}".format(input(''))
         client.send(message.encode('ascii'))
 
 if __name__ == '__main__':

@@ -42,4 +42,5 @@ class Deck(object):
 		return (len(self.deck))
 
 	def pull(self):
-		return (self.deck.pop(random.randrange(len(self.state))))
+		index = random.randint(0, len(self.deck) - 1)
+		return (self.deck.pop(index))
