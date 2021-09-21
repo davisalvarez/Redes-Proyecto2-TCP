@@ -39,8 +39,9 @@ def handle(player):
             if room_exists:                             #Make sure that the room exists
                 room.join(player)
             else:                                       #Else, tell the user
-                message = b'Provided room does not exists'
-                broadcast(message)
+                # message = b'Provided room does not exists'
+                # broadcast(message)
+                client.send('Provided room does not exists'.encode('ascii'))
         elif(player.room and not player.room.isPlaying):
             player.room.play()
         else:

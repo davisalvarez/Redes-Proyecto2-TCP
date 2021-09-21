@@ -26,7 +26,7 @@ class Room(object):
 
 	def remove(self, player):
 		self.players.remove(player)
-		player_.client.send("{} left the room".format(player).encode('ascii'))
+		player.client.send("{} left the room".format(player).encode('ascii'))
 
 	def play(self):
 		start = False
@@ -34,14 +34,16 @@ class Room(object):
 			self.admin.client.send('\nYou are the admin of the room \npress "s" to start the game'.encode('ascii'))   
 			admin_choice = self.admin.client.recv(1024).decode('ascii') 
 			if(admin_choice=="s"):
-				if(len(self.players) >= 2 and len(self.players) <= 4):
-					for player_ in self.players:
-						player_.client.send("{} started the game".format(self.admin).encode('ascii'))
-					game = Game(self.players)
-					self.isPlaying = True
-					game.play()
-				else:
-					self.admin.client.send("wait for more players to join the room ".encode('ascii'))
+				while True:
+					if(len(self.players) >= 2 and len(self.players) <= 4):
+						for player_ in self.players:
+							player_.client.send("{} started the game".format(self.admin).encode('ascii'))
+						game = Game(self.players)
+						self.isPlaying = True
+						game.play()
+					else:
+						self.admin.client.send("wait for more players to join the room ".encode('ascii'))
+						break
 			else:
 				for player_ in self.players:
 					player_.room = None
