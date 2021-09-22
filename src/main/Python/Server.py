@@ -20,33 +20,38 @@ def broadcast(message):
 def handle(player):
     client = player.client                                         
     while True:
-#        try:                           
-        if(not player.room):    
-            client.send('ROOM'.encode('ascii'))   
-            room_id = client.recv(1024).decode('ascii') 
-            room_id = int(room_id)
-            room = None
-            if(room_id==0):
-                room = Room(len(rooms)+1)
-                rooms.append(room)
+        try:                           
+            if(not player.room):    
+                client.send('ROOM'.encode('ascii'))   
+                room_id = client.recv(1024).decode('ascii') 
+                room_id = int(room_id)
+                room = None
+                if(room_id==0):
+                    room = Room(len(rooms)+1)
+                    rooms.append(room)
+                else:
+                    for room_ in rooms:
+                        if(room_._id==room_id):
+                            room = room_
+                room.join(player)
+            elif(player.room and not player.room.isPlaying):
+                players_ = player.room.play()
+                for player_ in players_:            
+                    players.remove(player_)
+                    player_.client.close()
+                    nickname = player.name
+                break
+
             else:
-                for room_ in rooms:
-                    if(room_._id==room_id):
-                        room = room_
-            room.join(player)
-        elif(player.room and not player.room.isPlaying):
-            player.room.play()
-        else:
-            message = client.recv(1024)
-            broadcast(message)
-#        except Exception as e:
-#            print(e)                                                        
-#            index = players.index(player)
-#            players.remove(player)
-#            client.close()
-#            nickname = player.name
-#            broadcast('{} left the server!'.format(nickname).encode('ascii'))
-#            break
+                message = client.recv(1024)
+                broadcast(message)
+        except Exception as e:                                                     
+            index = players.index(player)
+            players.remove(player)
+            client.close()
+            nickname = player.name
+            broadcast('{} left the server!'.format(nickname).encode('ascii'))
+            break
 
 def receive():                                                          
     while True:
