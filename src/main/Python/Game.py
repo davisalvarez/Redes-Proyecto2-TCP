@@ -11,11 +11,15 @@ class Game(object):
 
 	"""
 	def __init__(self, players):
+		'''Constructor'''
 		super(Game, self).__init__()
 		self.players = players
 		
 	def evaluate(self):
+		'''Evaluate rounds needed to win'''
+
 		for player in self.players:
+			
 			if(len(self.players)==2):
 				if(player.wins_counter==1):
 					return player
@@ -31,6 +35,7 @@ class Game(object):
 		state = "TABLE AFTER THE ROUND:\n"
 		for player in self.players:
 			state += "\tPlayer: " + player.name + " Tokens: " + str(player.wins_counter) + "\n"
+
 		return state
 
 	def play(self):

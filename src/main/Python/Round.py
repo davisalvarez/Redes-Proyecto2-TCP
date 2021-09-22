@@ -37,11 +37,9 @@ class Round(object):
 		return (state)
 
 	def play(self):
- 		player_index = 0
- 		winner = None
 
- 		for i in range(0,3):
- 			self.deck.pull()
+		player_index = 0
+		winner = None
 
  		for player in self.players:
  			player.current_card = self.deck.pull()
@@ -61,15 +59,23 @@ class Round(object):
  				if(protected==current_player):
  					protected.protection = False
 
- 			for player_ in self.players:
- 				player_.client.send("It is the turn of {}\n".format(current_player).encode('ascii'))
+			# Pick the top card on the deck
+			current_card = self.deck.pull()
+			
+			# Current player in turn
+			current_player = self.players[player_index]
 
- 			current_player.client.send("Pick the card you want to keep, the other one will set the action".encode('ascii'))
- 			picked_card = current_player.play(current_card)
+			# Tell other players whos turn is it
+			for player_ in self.players:
+				player_.client.send("It is the turn of {}\n".format(current_player).encode('ascii'))
 
- 			for player_ in self.players:
+			# Let the current player in turn decide which card to keep. 
+			picked_card = current_player.play(current_card)
+			
+			for player_ in self.players:
  				player_.client.send("{} put a {} on the table".format(current_player,picked_card.name).encode('ascii'))
- 			if(picked_card.name == 'Guard'):
+			
+			if(picked_card.name == 'Guard'):
 	 			for player_ in self.players:
 	 				player_.client.send("\n Guard allows you to discard one oponent if you guess right the card they have\n".encode('ascii'))
  				done = True
@@ -132,7 +138,8 @@ class Round(object):
  							done = False
 	 				if(not done):
 	 					current_player.client.send("Choose a valid player".encode('ascii'))
- 			elif(picked_card.name == 'Baron'):
+			
+			elif(picked_card.name == 'Baron'):
  				for player_ in self.players:
 	 				player_.client.send("\n Baron allows you to check secretly one's card and the lowest one will be out of the game\n".encode('ascii'))
  				done = True
@@ -178,7 +185,8 @@ class Round(object):
  				current_player.protection = True
  				self.protected.append(current_player)
 	 			current_player.client.send("Your protection is now activated until next turn".encode('ascii'))
- 			elif(picked_card.name == 'Prince'):
+			
+			elif(picked_card.name == 'Prince'):
  				for player_ in self.players:
 	 				player_.client.send("\n Prince allows you to make someone discard the card they have and pull a new one\n".encode('ascii'))
  				done = True
@@ -245,7 +253,7 @@ class Round(object):
 		 			player_.client.send("\n If Princess is discarted to are out of the round".format(current_player, player).encode('ascii'))
  				self.players_order.append(self.players.pop(self.players.index(current_player)))
  				for player_ in self.players:
-		 			player_.client.send("{} has left the round ".format(current_player).encode('ascii'))	
+		 			player_.client.send("{} has left the round ".format(current_player).encode('ascii'))
 	 			current_player.client.send("You are out! Wait until the round is over".encode('ascii'))							     #This one works
  			player_index = (player_index+1)%len(self.players)
  		for player_ in self.init_players:
@@ -263,5 +271,5 @@ class Round(object):
  			else:
  				for player_ in self.players:
 		 			player_.client.send("Is a tie! No one wins".encode('ascii'))
- 		return (self.sort())
+		return (self.sort())
 		
