@@ -61,7 +61,9 @@ def receive():
         player = Player(nickname, client)
         players.append(player)
         print("Connected with {} as {}".format(str(address), nickname))  
-        broadcast("{} joined the server!".format(nickname).encode('ascii'))
+        broadcast("********************************\n"
+                  "{} joined the server!\n"
+                  "********************************".format(nickname).encode('ascii'))
         client.send('Connected to server!'.encode('ascii'))
         thread = threading.Thread(target=handle, args=(player,))
         thread.start()
