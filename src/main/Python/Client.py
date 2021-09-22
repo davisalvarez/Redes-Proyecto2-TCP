@@ -18,7 +18,8 @@ def receive():
             elif message == 'ROOM':
             	print("----------------------------------\n      Welcome to Love letter     \n ----------------------------------\n\tCreate room (type 0)\n\tJoin Room (type room id)")
             else:
-                print(message)
+                if(message):
+                    print(message)
         except Exception as e:                                            #case on wrong ip/port details
             print(e,"An error occured!")
 

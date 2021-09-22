@@ -21,34 +21,41 @@ class Game(object):
 		for player in self.players:
 			
 			if(len(self.players)==2):
-				if(player.wins_counter==7):
-					return True
-			
+				if(player.wins_counter==1):
+					return player
 			elif(len(self.players)==3):
-				if(player.wins_counter==5):
-					return True
-			
+				if(player.wins_counter==1):
+					return player
 			elif(len(self.players)==4):
 				if(player.wins_counter==4):
-					return True
-
+					return player
 		return False
 
 	def state(self):
-		'''The game state'''
-
-		state = "TABLE AFTER THE GAME:\n"
-
+		state = "TABLE AFTER THE ROUND:\n"
 		for player in self.players:
 			state += "\tPlayer: " + player.name + " Tokens: " + str(player.wins_counter) + "\n"
 
 		return state
 
 	def play(self):
-		'''Main game'''
-
-		while(not self.evaluate()):		#While there is no winner
-			current = Round(self.players)
-			current.play()
+		round_counter = 1
+		while(not self.evaluate()):
 			for player_ in self.players:
-				player_.client.send('{}'.format(self.state()).encode('ascii'))
+				player_.client.send('\n----------------Round #{}----------------'.format(round_counter).encode('ascii'))
+			players = self.players
+			current = Round(players)
+			self.players = current.play()
+			for player_ in self.players:
+				player_.client.send('\n{}'.format(self.state()).encode('ascii'))
+			round_counter += 1
+		for player_ in self.players:
+			player_.client.send('\n{}'.format(self.state()).encode('ascii'))
+			player_.client.send('\n~~~~~~~~~~~~ WINNER IS {} ~~~~~~~~~~~~ '.format(self.evaluate()).encode('ascii'))
+			player_.client.send('\n\n\n ++++++++++++ GAME OVER  ++++++++++++'.format(self.evaluate()).encode('ascii'))
+			player_.client.close()
+
+
+
+
+
