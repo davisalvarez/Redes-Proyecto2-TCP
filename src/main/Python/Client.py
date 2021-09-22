@@ -3,6 +3,7 @@ import threading
 from argparse import ArgumentParser 
 from Player import *
 from config import *
+from Art import *
 
 nickname = None
 
@@ -16,7 +17,14 @@ def receive():
             if message == 'NICKNAME':
                 client.send(nickname.encode('ascii'))
             elif message == 'ROOM':
-            	print("----------------------------------\n      Welcome to Love letter     \n ----------------------------------\n\tCreate room (type 0)\n\tJoin Room (type room id)")
+                print("-----------------------------------------\n      "
+                      "       Welcome to Love letter     !\n"
+                      " ----------------------------------------\n"
+                      "\tShow menu          (type m)\n"
+                      "\tHistory and Rules  (type rul)\n"
+                      "\tCard action        (type card)\n"
+                      "\tCreate room        (type 0)\n"
+                      "\tJoin Room          (type room id)\n")
             else:
                 if(message):
                     print(message)
@@ -26,7 +34,19 @@ def receive():
 def write():
     while True:                                                 
         message = "{}".format(input('\n'))
-        client.send(message.encode('ascii'))
+
+        if (message == 'rul'):
+            rules()
+        elif (message == 'card'):
+            card()
+        elif (message == 'm'):
+            print("\tShow menu          (type m)\n"
+                  "\tHistory and Rules  (type rul)\n"
+                  "\tCard action        (type card)\n"
+                  "\tCreate room        (type 0)\n"
+                  "\tJoin Room          (type room id)\n")
+        else:
+            client.send(message.encode('ascii'))
 
 if __name__ == '__main__':
 
