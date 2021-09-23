@@ -34,6 +34,7 @@ class Room(object):
 							   "\tYou are the admin of the room\n"
 							   "\t\tPress 's' to start the game\n"
 							   "\t\tPress 'x' to kill the room\n"
+                               "\t\tPress 'c' to enter chat room\n"
 							   "_________________________________________".encode('ascii'))
         start = False
         admin_choice = self.admin.client.recv(1024).decode('ascii')
@@ -54,7 +55,12 @@ class Room(object):
                 self.players = []
                 player_.client.send("XXX {} destroyed the room  XXX".format(self.admin).encode('ascii'))
                 return ([])
-        #			if(admin_choice=="c"):				#Probably an option to chat
+            if(admin_choice == "c"):
+                self.admin.client.send("\n\n__________________________________________________________________\n\n\t                      CHAT ROOM                      \n__________________________________________________________________\n\n>>".encode('ascii'))
+                msg = self.admin.client.recv(1024).decode('ascii')
+                for player_ in self.players:
+                    print(player_)
+                    player_.client.send("\n[{}]\n".format(msg).encode('ascii'))
         for player_ in self.players:
             player_.client.send('\n+++++++++++++++++++++++++++++++\n'
 								'++++++++++ GAME OVER ++++++++++\n'

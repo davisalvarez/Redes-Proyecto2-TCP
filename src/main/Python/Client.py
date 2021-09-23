@@ -1,3 +1,4 @@
+from helpers import enter_to_continue, screen_clear
 import socket
 import threading
 from argparse import ArgumentParser 
@@ -17,14 +18,7 @@ def receive():
             if message == 'NICKNAME':
                 client.send(nickname.encode('ascii'))
             elif message == 'ROOM':
-                print("-----------------------------------------\n      "
-                      "       Welcome to Love letter     !\n"
-                      " ----------------------------------------\n"
-                      "\tShow menu          (type m)\n"
-                      "\tHistory and Rules  (type rul)\n"
-                      "\tCard action        (type card)\n"
-                      "\tCreate room        (type 0)\n"
-                      "\tJoin Room          (type room id)\n")
+                print(mainMenu())
             else:
                 if(message):
                     print(message)
@@ -36,15 +30,18 @@ def write():
         message = "{}".format(input('\n'))
 
         if (message == 'rul'):
-            rules()
+            screen_clear()
+            print(rules())
+            enter_to_continue()
+            print(mainMenu())
         elif (message == 'card'):
-            card()
+            screen_clear()
+            print(card())
+            enter_to_continue()
+            print(mainMenu())
         elif (message == 'm'):
-            print("\tShow menu          (type m)\n"
-                  "\tHistory and Rules  (type rul)\n"
-                  "\tCard action        (type card)\n"
-                  "\tCreate room        (type 0)\n"
-                  "\tJoin Room          (type room id)\n")
+            screen_clear()
+            print(mainMenu())
         else:
             client.send(message.encode('ascii'))
 
