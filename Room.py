@@ -1,5 +1,6 @@
 from Game import *
-
+import socket
+import threading
 
 class Room(object):
     """docstring for Room"""
@@ -10,6 +11,7 @@ class Room(object):
         self.isPlaying = False
         self.players = []
         self.admin = None
+        self.threads = []
 
     def join(self, player):
         if (len(self.players) == 4):
@@ -29,6 +31,30 @@ class Room(object):
         self.players.pop(self.players.index(player))
         player_.client.send("--  {} left the room  --".format(player).encode('ascii'))
 
+    def broadcast(self, message, client):
+        '''Broadcast Messages'''
+        for player_ in self.players:
+            if player_.client == client:
+                name = player_.name
+        for player_ in self.players:
+            if player_.client != client:
+                player_.client.send("[{}]: {}".format(name, message).encode('ascii'))
+        
+    def handle(self, client):
+        while True:
+            try:
+                message = client.recv(1024).decode('ascii')
+                if message == "exit" and client == self.admin.client:
+                    for thread_ in self.threads:
+                        thread_.join()
+                else:
+                    self.broadcast(message, client)
+            except:
+
+                # self.players.remove(client)
+                client.close()
+                break
+
     def play(self):
         
         self.admin.client.send("_________________________________________\n"
@@ -39,7 +65,6 @@ class Room(object):
 							   "_________________________________________".encode('ascii'))
         
         start = False
-        admin_choice = self.admin.client.recv(1024).decode('ascii')
         
         while (not start):
             
@@ -47,6 +72,8 @@ class Room(object):
             # S: Start the game
             # X: Kill the room
             # C: Group Chat
+
+            admin_choice = self.admin.client.recv(1024).decode('ascii')
 
             if (admin_choice == "s"):
                 '''Start the game'''
@@ -74,9 +101,15 @@ class Room(object):
                     # Notify every one that they enter superchat mode
                     for player_ in self.players:
                         player_.client.send("\n\n__________________________________________________________________\n\n\t                      CHAT ROOM                      \n__________________________________________________________________\n\n>>".encode('ascii'))
-                    
-                    # Launch Chat Room to evreyone
-                    
+                        
+                        # Launch Chat Room to evreyone
+                        # Create threads
+                        
+                        thread = threading.Thread(target=self.handle, args=(player_.client,))
+                        self.threads.append(thread)
+                        thread.start()
+
+
                 else:
                     self.admin.client.send("Wait for more players to join the room... ".encode('ascii'))
         
