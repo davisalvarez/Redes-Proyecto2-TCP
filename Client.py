@@ -52,6 +52,7 @@ def write():
             isChating = True
             client.send('CHATING'.encode('ascii'))
         elif(message == 'exit' and isChating):
+            client.send('chating|exit'.encode('ascii'))
             screen_clear()
             print(mainMenu())
             isChating = False

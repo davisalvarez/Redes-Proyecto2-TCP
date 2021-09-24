@@ -40,14 +40,18 @@ def handle(player):
                     while player.isChating:
                         message = client.recv(1024).decode('ascii')
                         message = message.split("|")
-                        if message[1] == "exit":
+                        print(message)
+                        if message[0] == "chating" and message[1] == "exit":
                             player.isChating = False
+                            break
                         else:
                             if len(players) > 1:
                                 broadcast_chat(message[1], name)
                             else:
                                 player.client.send("Wait for mor players to join.")
-                    
+                
+                msg = client.recv(1024).decode('ascii') 
+
                 # Aqui muere
                 room_id = msg
                 room_id = int(room_id)
