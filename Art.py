@@ -6,6 +6,7 @@ def mainMenu():
     Show menu          (type m)\n
     History and Rules  (type rul)\n
     Card action        (type card)\n
+    Super Chat         (type chat)\n
     Create room        (type 0)\n
     Join Room          (type room id)\n
     '''
@@ -137,6 +138,16 @@ def card():
     
   - Princess   8  1   If a player plays this card for any reason, they are \n
                       eliminated from the round.\n
+    '''
+
+def welcome_to_super_chat():
+    '''Super chat header'''
+
+    return '''
+    __________________________________________________________________
+
+                            WELCOME TO SUPER CHAT                      
+    __________________________________________________________________
     '''
 
 def simbolo():

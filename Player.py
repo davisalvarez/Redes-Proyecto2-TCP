@@ -14,6 +14,7 @@ class Player(object):
 		self.client = client
 		self.room = None
 		self.protection = False					#When you play a handmaid this value is setted to true
+		self.isChating = False
 
 	def reset(self):
 		self.protection = False

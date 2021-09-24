@@ -31,29 +31,29 @@ class Room(object):
         self.players.pop(self.players.index(player))
         player_.client.send("--  {} left the room  --".format(player).encode('ascii'))
 
-    def broadcast(self, message, client):
-        '''Broadcast Messages'''
-        for player_ in self.players:
-            if player_.client == client:
-                name = player_.name
-        for player_ in self.players:
-            if player_.client != client:
-                player_.client.send("[{}]: {}".format(name, message).encode('ascii'))
+    # def broadcast(self, message, client):
+    #     '''Broadcast Messages'''
+    #     for player_ in self.players:
+    #         if player_.client == client:
+    #             name = player_.name
+    #     for player_ in self.players:
+    #         if player_.client != client:
+    #             player_.client.send("[{}]: {}".format(name, message).encode('ascii'))
         
-    def handle(self, client):
-        while True:
-            try:
-                message = client.recv(1024).decode('ascii')
-                if message == "exit" and client == self.admin.client:
-                    for thread_ in self.threads:
-                        thread_.join()
-                else:
-                    self.broadcast(message, client)
-            except:
+    # def handle(self, client):
+    #     while True:
+    #         try:
+    #             message = client.recv(1024).decode('ascii')
+    #             if message == "exit" and client == self.admin.client:
+    #                 for thread_ in self.threads:
+    #                     thread_.join()
+    #             else:
+    #                 self.broadcast(message, client)
+    #         except:
 
-                # self.players.remove(client)
-                client.close()
-                break
+    #             # self.players.remove(client)
+    #             client.close()
+    #             break
 
     def play(self):
         
@@ -61,7 +61,6 @@ class Room(object):
 							   "\tYou are the admin of the room\n"
 							   "\t\tPress 's' to start the game\n"
 							   "\t\tPress 'x' to kill the room\n"
-                               "\t\tPress 'c' to enter chat room\n"
 							   "_________________________________________".encode('ascii'))
         
         start = False
@@ -95,23 +94,23 @@ class Room(object):
                 player_.client.send("XXX {} destroyed the room  XXX".format(self.admin).encode('ascii'))
                 return ([])
             
-            if(admin_choice == "c"):
-                '''Group chat'''
-                if (len(self.players) >= 2 and len(self.players) <= 4):
-                    # Notify every one that they enter superchat mode
-                    for player_ in self.players:
-                        player_.client.send("\n\n__________________________________________________________________\n\n\t                      CHAT ROOM                      \n__________________________________________________________________\n\n>>".encode('ascii'))
+            # if(admin_choice == "c"):
+            #     '''Group chat'''
+            #     if (len(self.players) >= 2 and len(self.players) <= 4):
+            #         # Notify every one that they enter superchat mode
+            #         for player_ in self.players:
+            #             player_.client.send("\n\n__________________________________________________________________\n\n\t                      CHAT ROOM                      \n__________________________________________________________________\n\n>>".encode('ascii'))
                         
-                        # Launch Chat Room to evreyone
-                        # Create threads
+            #             # Launch Chat Room to evreyone
+            #             # Create threads
                         
-                        thread = threading.Thread(target=self.handle, args=(player_.client,))
-                        self.threads.append(thread)
-                        thread.start()
+            #             thread = threading.Thread(target=self.handle, args=(player_.client,))
+            #             self.threads.append(thread)
+            #             thread.start()
 
 
-                else:
-                    self.admin.client.send("Wait for more players to join the room... ".encode('ascii'))
+            #     else:
+            #         self.admin.client.send("Wait for more players to join the room... ".encode('ascii'))
         
         for player_ in self.players:
             player_.client.send('\n+++++++++++++++++++++++++++++++\n'

@@ -7,7 +7,7 @@ from config import *
 from Art import *
 
 nickname = None
-
+isChating = False
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)      #socket initialization
 client.connect((host, port))                             
 
@@ -21,28 +21,48 @@ def receive():
                 print(mainMenu())
             else:
                 if(message):
-                    print(message)
+                    msg = message.split("|")
+                    if msg[0] == 'chating' and isChating:
+                        print(msg[1])
+                    else:
+                        print(message)
         except Exception as e:                                            #case on wrong ip/port details
             print(e,"An error occured!")
 
 def write():
+
+    global isChating
+
     while True:                                                 
         message = "{}".format(input('\n'))
 
-        if (message == 'rul'):
+        if (message == 'rul' and not isChating):
             screen_clear()
             print(rules())
             enter_to_continue()
             print(mainMenu())
-        elif (message == 'card'):
+        elif (message == 'card' and not isChating):
             screen_clear()
             print(card())
             enter_to_continue()
             print(mainMenu())
-        elif (message == 'm'):
+        elif(message == 'chat' and not isChating):
+            screen_clear()
+            print(welcome_to_super_chat())
+            isChating = True
+            client.send('CHATING'.encode('ascii'))
+        elif(message == 'exit' and isChating):
+            screen_clear()
+            print(mainMenu())
+            isChating = False
+        elif (message == 'm' and not isChating):
             screen_clear()
             print(mainMenu())
         else:
+            
+            if isChating:
+                message = "chating|" + message # Is a flag so the server knows this is a superchat message\
+            
             client.send(message.encode('ascii'))
 
 if __name__ == '__main__':
